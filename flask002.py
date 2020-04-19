@@ -4,8 +4,11 @@ from forms import RegistForm, LoginForm, PwdForm, InfoForm
 from model import User
 from flask import session
 import sqlite3
-
+import os
 from functools import wraps
+
+print(os.getcwd())
+
 
 app = Flask(__name__)
 app.config["DATABASE"] = "database.db"
@@ -264,7 +267,10 @@ def user_regist():  # 注册
         # user.email = request.form["user_email"]
         user.email = form.user_email.data
         # user.face = request.form["user_face"]
-        user.face = form.user_face.data
+        # user.face = form.user_face.data
+        filerstorage = request.files["user_face"]  # 获取头像文件
+        user.face = filerstorage
+        user.face = filerstorage.filename
 
         # 查看用户是否存在
         user_one = query_user_by_name(user.name)
@@ -277,6 +283,8 @@ def user_regist():  # 注册
         # 如果不存在执行插入操作
         # 插入一条数据
         instert_user_to_db(user)
+        # 保存用户头像文件
+        filerstorage.save(user.face)
         flash("注册成功！", category="ok")
         # username作为查询参数带到url中去
         ## 重定向页面 生成url 执行 user_login 函数 跳转到登录界面
