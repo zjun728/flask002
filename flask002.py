@@ -9,7 +9,6 @@ from functools import wraps
 
 print(os.getcwd())
 
-
 app = Flask(__name__)
 app.config["DATABASE"] = "database.db"
 app.config["SECRET_KEY"] = "who i am? do you know?"
@@ -268,8 +267,8 @@ def user_regist():  # 注册
         user.email = form.user_email.data
         # user.face = request.form["user_face"]
         # user.face = form.user_face.data
+        # filerstorage=form.user_face.data
         filerstorage = request.files["user_face"]  # 获取头像文件
-        user.face = filerstorage
         user.face = filerstorage.filename
 
         # 查看用户是否存在
